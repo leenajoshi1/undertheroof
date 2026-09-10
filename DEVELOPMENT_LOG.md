@@ -56,6 +56,14 @@
 - Production builds and TypeScript checks pass. Three.js scene construction/linkage/disposal tests pass; tsx emits a non-failing CommonJS deprecation warning for Three.js. Browser QA attempted through the supplied browser tool, but it reported no browser available; interactive WebGL appearance is not visually verified.
 - Artifacts are saved locally under ignored artifacts/municipal/. Public snapshot and documentation are committed; credentials remain ignored. No auth, database, chat, nationwide lookup, PDFs or actual photo-analysis pipeline added.
 
+## Municipal and spatial stage verified checkpoint - 2026-09-10
+
+- Jurisdiction/property selected for the hackathon demo: Philadelphia, Pennsylvania; 2020 Delancey Place, OPA parcel 081035500. The source decision is documented in `MUNICIPAL_DEMO.md` and uses the City-published OpenDataPhilly/OPA and L&I public CARTO endpoints with bounded, read-only queries.
+- Real public municipal end-to-end run succeeded with the live Philadelphia endpoint. It collected 20 evidence objects and produced deterministic assessment-based estimates of $44,128.70 for 2026 and $48,311.30 for 2027. The $4,182.60 difference is an assessment-history comparison, not a prediction of the billed tax. Unknown special-assessment liability, abatement expiration, buyer eligibility, payment history and actual utility charges remain unknown and are presented as follow-up questions.
+- The municipal executor exposes model-selectable jurisdiction, assessor, tax history, exemptions/abatements, special assessments, permits, recurring charges and ownership-cost calculation tools. Tests confirm the model may choose a subset and any order; no fixed checklist is required. All tool outputs are grounded Evidence objects and calculations require collected evidence IDs.
+- Spatial stage is integrated with a minimal room-level Three.js scene. A qualified kitchen layout observation cites floor-plan/photo inputs, can trigger permit lookup, and links the resulting finding back to the kitchen. Validation rejects unsupported structural/code/illegal-work diagnoses, unknown rooms, missing visual sources, missing permit linkage and synthetic spatial findings without an explicit label.
+- Verification: 25 tests pass, TypeScript passes, production build passes, and `npm.cmd run demo:municipal -- --live` succeeds. The scripted demo uses a clearly labeled synthetic spatial fixture because no actual listing photos or measured floor plan are asserted for this public-record demonstration. The original P0 architecture and live Astra route remain unchanged.
+
 ## Live P0 verified checkpoint - 2026-09-10
 
 - Re-ran all four behavioral evaluations through the live GPT-6 Astra Responses API with the configured `gpt-6-astra` model. All four passed: `documented-roof` (0 findings), `missing-permit` (1 finding), `conflicting-documents` (1 finding), and `no-concerns` (0 findings).

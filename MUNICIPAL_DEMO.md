@@ -1,0 +1,67 @@
+# Municipal demo: one Philadelphia property
+
+Demo: **2020 Delancey Place, Philadelphia, PA**, OPA parcel **081035500**. This is a public-record demonstration, not a representation that the home is listed for sale. No owner identities or mailing addresses are retrieved.
+
+## Run
+
+```powershell
+npm.cmd run demo:municipal
+npm.cmd run demo:municipal -- --live
+npm.cmd run demo:municipal -- --synthetic
+```
+
+These use the explicitly scripted model transport. The first uses the dated public snapshot; `--live` calls the public Philadelphia API, not Astra. Reports go to ignored `artifacts/municipal/`.
+
+Run the app as usual and visit `/municipal`. Set `SPATIAL_DEMO_ENABLED=1` in your local environment and restart to enable the optional illustrative room scenario. Otherwise the spatial tool and view remain disabled. This additive page reuses existing styles; the original page and P0 integration are unchanged.
+
+API example:
+
+```json
+{"dataMode":"snapshot","model":"scripted","spatial":false}
+```
+
+POST to `/api/municipal`. Data mode must be explicit. The UI deliberately uses the scripted transport. The additive municipal Astra transport is available behind `MUNICIPAL_ASTRA_ENABLED=1`, using model `gpt-6-astra`, but is not live-verified and has not been exercised while credits are blocked. The original `npm.cmd run eval:live` remains unchanged and ready to rerun.
+
+## Public sources and limitations
+
+Philadelphia publishes assessor/property characteristics and assessment history in its [open-data catalog](https://opendataphilly.org/datasets/philadelphia-properties-and-assessment-history/), including public API links and the City license. Its catalog cautions that published records may lag the values used for a bill. Data is attributed to OPA and L&I and used as published, without completeness guarantees.
+
+The adapter queries only `https://phl.carto.com/api/v2/sql` using three fixed SELECT statements: `opa_properties_public`, `assessments`, and `permits`. There is no user-supplied SQL, arbitrary URL fetching, login, CAPTCHA bypass, or HTML scraping. Queries are bounded, time out, and validate parcel identity, schemas and unique assessment years. Permit results cap at 100 and disclose truncation. Data is cached only inside one investigation.
+
+`lib/municipal/philadelphia.snapshot.json` contains the actual retrieved rows, exact source queries and retrieval timestamp. Run `node scripts/refresh-municipal.mjs` explicitly to refresh it, then run tests and review the diff. Snapshot is dated public evidence, not synthetic evidence and not a live retrieval. Synthetic mode is an explicit test overlay with fictional assessment amounts. Live failure returns an error; it never silently changes modes.
+
+Reviewed policy references are labeled `reference_snapshot`:
+
+- [Philadelphia tax-rate guidance for 2027](https://www.phila.gov/2026-07-20-learn-how-to-lower-your-property-tax-bill-ahead-of-the-2027-valuations/): used only for 2026/2027 estimates at 1.3998%.
+- [Homestead guidance](https://www.phila.gov/services/payments-assistance-taxes/taxes/property-and-real-estate-taxes/get-real-estate-tax-relief/get-the-homestead-exemption/): eligibility guidance, not a buyer approval or guarantee of transfer treatment.
+- [Center City District assessments](https://centercityphila.org/ccd-assessments/): separate potential charge category. Parcel membership and an actual bill are not established. Published example text and arithmetic are inconsistent, so no parcel charge is inferred from those examples. Ask for the bill/certification.
+- [Water rates effective September 2026](https://water.phila.gov/drops/new-rate-information-effective-september-2026/): illustrative residential stormwater at $23.05 monthly; actual accounts, meter size, usage, discounts and applicability remain unverified.
+
+## Buyer-cost demonstration
+
+The snapshot's assessor current roll corresponds in value to the 2027 history row; it must not silently substitute for 2026.
+
+| Year | Recorded taxable land + building | Estimated annual tax | Monthly tax equivalent |
+|---|---:|---:|---:|
+| 2026 | $3,152,500 | $44,128.70 | $3,677.39 |
+| 2027 | $3,451,300 | $48,311.30 | $4,025.94 |
+
+The tax-only difference is $4,182.60 annually. The calculator does not subtract homestead again: taxable fields already incorporate exemptions. Holding assessed value and rate constant, a no-exemption scenario is $1,399.80 more annually for these rows. This does not predict exemption loss. An optional full-year stormwater scenario adds $276.60; it is not the actual calendar-2026 utility bill and does not include water/sewer consumption or meter service charges.
+
+Actual billed tax, payment history, arrears, tax certificates, abatement type/expiration, CCD membership/amount and other special assessments remain unverified. Unknown amounts stay null, never zero. The modeled subtotal excludes mortgage, insurance, repairs and unverified charges; it is not total ownership cost.
+
+## Agent and spatial boundary
+
+The executor exposes jurisdiction, assessor, tax history, exemption, special-assessment, permit, recurring-charge and calculator tools. It does not impose their order. Tests demonstrate a model-selected subset and a different order without requiring a checklist. The scripted demo has an explicit test sequence; it is never represented as autonomous Astra behavior.
+
+Tool results become compatible Evidence objects with provenance, scope, tax year, limitations and optional derivedFrom/areaIds. Existing grounding validation is reused unchanged. The municipal wrapper additionally requires calculation dependencies and spatial-to-permit citations. Activity events use fixed high-level labels, not chain-of-thought, and are currently returned after completion rather than streamed.
+
+Spatial fixtures are text descriptions simulating a future floor plan, listing photo and claim; they are not real images of this house. A validated structured observation is an uncertain hypothesis. The prototype rejects structural/code diagnoses, nonexistent sources and unknown rooms. It does not provide comprehensive semantic safety or actual multimodal analysis.
+
+The test path is:
+
+`synthetic plan/photo/claim → structured kitchen observation → transport chooses permit tool → public permit scope/search → grounded finding → kitchen area link`
+
+The public record contains permit 959959, a 2019 gutter/roofing scope. That does not establish anything about the hypothetical kitchen layout. Findings using these synthetic spatial inputs must explicitly say `Synthetic scenario:` and retain the underlying source citations.
+
+Three.js renders only two illustrative room boxes in meters. Geometry userData contains finding and evidence IDs, so selecting the kitchen opens the related finding; selecting its finding highlights the room. Accessible room buttons provide the same linkage. There is no decorative reconstruction, wall-removal detection, measured floor-plan inference, or structural analysis. Scene construction/disposal and linkage are tested. Browser/WebGL visual QA remains pending because no browser was available to the automation tool.

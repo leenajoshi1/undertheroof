@@ -8,19 +8,22 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
-    "eval:live": "tsx --env-file=.env.local --test tests/live.eval.ts"
+    "eval:live": "tsx --env-file=.env.local --test tests/live.eval.ts",
+    "demo:municipal": "tsx scripts/municipal-demo.ts"
   },
   "dependencies": {
     "next": "^16.3.4",
     "openai": "^7.13.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "three": "^0.186.0",
     "zod": "^4.6.1"
   },
   "devDependencies": {
     "@types/node": "^22.20.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.185.4",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2"
   }

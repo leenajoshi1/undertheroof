@@ -1,0 +1,90 @@
+{
+  "retrievedAt": "2026-09-10T15:44:38.193Z",
+  "attribution": "City of Philadelphia OPA and Department of Licenses and Inspections",
+  "license": "https://opendataphilly.org/datasets/philadelphia-properties-and-assessment-history/",
+  "datasets": {
+    "assessor": {
+      "sourceUrl": "https://phl.carto.com/api/v2/sql?q=SELECT%20location%2Cparcel_number%2Ccategory_code_description%2Cmarket_value%2Ctaxable_land%2Ctaxable_building%2Cexempt_land%2Cexempt_building%2Chomestead_exemption%2Cassessment_date%2Cmarket_value_date%20FROM%20opa_properties_public%20WHERE%20parcel_number%3D'081035500'%20LIMIT%202",
+      "rows": [
+        {
+          "location": "2020 DELANCEY PL",
+          "parcel_number": "081035500",
+          "category_code_description": "SINGLE FAMILY",
+          "market_value": 3551300,
+          "taxable_land": 710260,
+          "taxable_building": 2741040,
+          "exempt_land": 0,
+          "exempt_building": 100000,
+          "homestead_exemption": 100000,
+          "assessment_date": "2026-04-29T15:39:45Z",
+          "market_value_date": null
+        }
+      ]
+    },
+    "history": {
+      "sourceUrl": "https://phl.carto.com/api/v2/sql?q=SELECT%20parcel_number%2Cyear%2Cmarket_value%2Ctaxable_land%2Ctaxable_building%2Cexempt_land%2Cexempt_building%20FROM%20assessments%20WHERE%20parcel_number%3D'081035500'%20AND%20year%20%3E%3D%20'2023'%20AND%20year%20%3C%3D%20'2027'%20ORDER%20BY%20year%20DESC%20LIMIT%2010",
+      "rows": [
+        {
+          "parcel_number": "081035500",
+          "year": "2027",
+          "market_value": 3551300,
+          "taxable_land": 710260,
+          "taxable_building": 2741040,
+          "exempt_land": 0,
+          "exempt_building": 100000
+        },
+        {
+          "parcel_number": "081035500",
+          "year": "2026",
+          "market_value": 3252500,
+          "taxable_land": 650500,
+          "taxable_building": 2502000,
+          "exempt_land": 0,
+          "exempt_building": 100000
+        },
+        {
+          "parcel_number": "081035500",
+          "year": "2025",
+          "market_value": 3252500,
+          "taxable_land": 650500,
+          "taxable_building": 2502000,
+          "exempt_land": 0,
+          "exempt_building": 100000
+        },
+        {
+          "parcel_number": "081035500",
+          "year": "2024",
+          "market_value": 3268800,
+          "taxable_land": 653700,
+          "taxable_building": 2535100,
+          "exempt_land": 0,
+          "exempt_building": 80000
+        },
+        {
+          "parcel_number": "081035500",
+          "year": "2023",
+          "market_value": 3268800,
+          "taxable_land": 653700,
+          "taxable_building": 2535100,
+          "exempt_land": 0,
+          "exempt_building": 80000
+        }
+      ]
+    },
+    "permits": {
+      "sourceUrl": "https://phl.carto.com/api/v2/sql?q=SELECT%20permitnumber%2Copa_account_num%2Caddress%2Cpermittype%2Capprovedscopeofwork%2Cstatus%2Cpermitissuedate%2Cpermitcompleteddate%20FROM%20permits%20WHERE%20opa_account_num%3D'081035500'%20ORDER%20BY%20permitissuedate%20DESC%20NULLS%20LAST%2Cpermitnumber%20DESC%20LIMIT%20101",
+      "rows": [
+        {
+          "permitnumber": "959959",
+          "opa_account_num": "081035500",
+          "address": "2020 DELANCEY PL",
+          "permittype": "BP_ALTER",
+          "approvedscopeofwork": "REPAIR POLE GUTTER/GUSSET FRONT & REAR OF HOUSE. REPAIR/REPLACE ROOFING MEMBRANE , NO REPLACEMENT OF WOOD CORNICE.AS PER HISTORIC COMMISSION APPROVAL",
+          "status": "COMPLETED",
+          "permitissuedate": "2019-03-22T15:55:58Z",
+          "permitcompleteddate": "2019-10-03T17:04:09Z"
+        }
+      ]
+    }
+  }
+}

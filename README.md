@@ -40,6 +40,6 @@ Live eval reports are written to ignored `artifacts/live-p0/`. Completed investi
 
 `lib/tools.ts` supplies four synthetic datasets behind an adapter. Evidence is returned only when a tool collects it. `lib/evidence.ts` checks schema, source IDs, exact quotations, extractive facts, and a conservative guard against permit-absence accusations. Inference is separate from factual source text. These checks do not prove semantic entailment, source truth, completeness, or that a quoted excerpt preserves all relevant context. Live evals and human evidence review remain necessary.
 
-No live trace, external property data, PDF uploads, image analysis, or cost calculator is implemented yet. These follow verified P0 in the requested priority order. Do not expose this unauthenticated, API-billed prototype publicly without adding usage controls.
+The original P0 route has no live trace, external property data, PDF uploads or image analysis. An additive one-property municipal demo is now available at `/municipal`; see [MUNICIPAL_DEMO.md](MUNICIPAL_DEMO.md) for public sources, scripted execution, calculator limitations and the feature-gated spatial prototype. Do not expose this unauthenticated, API-billed prototype publicly without adding usage controls.
 
 API integration references: [function calling](https://developers.openai.com/api/docs/guides/function-calling), [GPT-6 Astra](https://developers.openai.com/api/docs/models/gpt-6-astra).

@@ -22,6 +22,11 @@ p { overflow-wrap: anywhere; } .facts { white-space: pre-line; }
 summary { cursor: pointer; font-size: 13px; color: #365b49; padding: 8px 0; }
 blockquote { margin: 12px 0; border-left: 2px solid #b6c9b8; padding: 8px 16px; font-size: 13px; }
 .error { background: #fae9df; color: #873d25; padding: 16px; border-radius: 8px; }
+.trace { border-left: 3px solid #b38742; padding: 1rem 1.25rem; margin: 2rem 0; background: #fffdf8; }
+.trace ol { margin: 0; padding-left: 1.25rem; }
+.trace li { margin: .35rem 0; color: #617169; }
+.trace li.completed { color: #263238; }
+.trace li.rejected, .trace li.failed { color: #9a4d2f; }
 footer { margin-top: 70px; }
 :focus-visible { outline: 3px solid #b38742; outline-offset: 3px; }
 @media(max-width: 600px) { .input-row { flex-direction: column; } header span { display: none; } header { margin-bottom: 40px; } }

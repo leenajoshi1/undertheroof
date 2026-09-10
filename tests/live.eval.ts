@@ -12,9 +12,22 @@ for (const sample of ['documented-roof', 'missing-permit', 'conflicting-document
   test(`live Astra: ${sample}`, { timeout: 240_000 }, async () => {
     assert.equal(process.env.OPENAI_MODEL || 'gpt-6-astra', 'gpt-6-astra', 'Live gate must use GPT-6 Astra.');
     await mkdir(reportDirectory, { recursive: true });
+    const trace: unknown[] = [];
+    let modelTurns = 0;
+    const startedAt = Date.now();
+    const liveTurn = createModelTurn();
     let result;
     try {
-      result = await investigate(sample, createModelTurn(), AbortSignal.timeout(230_000));
+      result = await investigate(sample, async (input, signal) => {
+        modelTurns++;
+        const last = input.at(-1);
+        if (last?.type === 'function_call_output') trace.push({ event: 'tool_result', callId: last.call_id, result: last.output });
+        await writeFile(`${reportDirectory}/${sample}.trace.json`, JSON.stringify({ modelTurns, trace }, null, 2));
+        const response = await liveTurn(input, signal);
+        trace.push({ event: 'model_tools', turn: modelTurns, calls: response.output.filter(item => item.type === 'function_call').map(item => ({ callId: item.call_id, name: item.name, arguments: JSON.parse(item.arguments) })) });
+        await writeFile(`${reportDirectory}/${sample}.trace.json`, JSON.stringify({ modelTurns, trace }, null, 2));
+        return response;
+      }, AbortSignal.timeout(230_000));
     } catch (error) {
       // Do not print SDK errors verbatim: authentication errors can contain key fragments.
       const e = error as { status?: number; code?: string; name?: string };
@@ -22,7 +35,7 @@ for (const sample of ['documented-roof', 'missing-permit', 'conflicting-document
       await writeFile(`${reportDirectory}/${sample}.error.json`, JSON.stringify(failure, null, 2));
       assert.fail(`Live request failed: ${JSON.stringify(failure)}`);
     }
-    await writeFile(`${reportDirectory}/${sample}.json`, JSON.stringify(result, null, 2));
+    await writeFile(`${reportDirectory}/${sample}.json`, JSON.stringify({ ...result, modelTurns, latencyMs: Date.now() - startedAt, runAt: new Date().toISOString() }, null, 2));
     console.log(JSON.stringify({ sample, findings: result.findings.length, corrections: result.corrections, audit: result.audit }));
     assert.equal(validateFindings({ findings: result.findings }, result.evidence).ok, true);
     const text = JSON.stringify(result.findings).toLowerCase();

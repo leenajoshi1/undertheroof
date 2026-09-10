@@ -86,6 +86,20 @@ test('executor permits model-selected subset and order, without requiring a chec
   assert.ok(!result.events.some(e => e.tool === 'get_permit_history'));
 });
 
+test('spatial Astra request carries the real PNG image input', async () => {
+  let turn = 0;
+  const result = await investigateMunicipal({ mode: 'snapshot', modelLabel: 'gpt-6-astra', spatial: true, turn: async input => {
+    if (turn++ === 0) {
+      const content = (input[0] as { content: unknown }).content;
+      assert.ok(Array.isArray(content));
+      assert.ok(content.some(item => (item as { type?: string }).type === 'input_image' && (item as { image_url?: string }).image_url?.startsWith('data:image/png;base64,')));
+      return { output: [{ type: 'function_call', call_id: 'image-check', name: 'get_assessor_record', arguments: JSON.stringify({ parcel: '081035500' }) }] };
+    }
+    return { output: [{ type: 'function_call', call_id: 'submit', name: 'submit_findings', arguments: JSON.stringify({ findings: [] }) }] };
+  } });
+  assert.equal(result.findings.length, 0);
+});
+
 test('synthetic scenario does not invent a tax increase when supplied years are equal', async () => {
   const result = await investigateMunicipal({ mode: 'synthetic', modelLabel: 'scripted', turn: createScriptedMunicipalTurn(false) });
   assert.match(result.findings[0].inference, /are equal/);

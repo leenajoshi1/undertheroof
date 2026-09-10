@@ -22,7 +22,10 @@ export function createScriptedMunicipalTurn(spatial: boolean, injectBadCitation 
       }
     }
     const initial = input[0];
-    if ('content' in initial && typeof initial.content === 'string') for (const e of JSON.parse(initial.content).initialEvidence) evidence.set(e.id, e);
+    if ('content' in initial) {
+      const content = typeof initial.content === 'string' ? initial.content : Array.isArray(initial.content) ? initial.content.find(item => item.type === 'input_text')?.text : undefined;
+      if (content) for (const e of JSON.parse(content).initialEvidence) evidence.set(e.id, e);
+    }
     let name: string, args: unknown;
     if (step < plan.length) [name, args] = plan[step];
     else {

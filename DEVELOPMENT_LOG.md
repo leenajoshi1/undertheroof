@@ -56,6 +56,16 @@
 - Production builds and TypeScript checks pass. Three.js scene construction/linkage/disposal tests pass; tsx emits a non-failing CommonJS deprecation warning for Three.js. Browser QA attempted through the supplied browser tool, but it reported no browser available; interactive WebGL appearance is not visually verified.
 - Artifacts are saved locally under ignored artifacts/municipal/. Public snapshot and documentation are committed; credentials remain ignored. No auth, database, chat, nationwide lookup, PDFs or actual photo-analysis pipeline added.
 
+## Hackathon demo hardening - multimodal Astra and live trace - 2026-09-10
+
+- Added `lib/municipal/demo-floor-plan.png`, a clearly labeled synthetic floor-plan asset. The municipal Astra request sends it as a real `input_image` data URL with `detail: high`; the image is not converted into a hard-coded observation. The model still calls `record_spatial_observation`, whose structured output becomes a derived Evidence object.
+- The first live multimodal attempt correctly reached GPT-6 Astra but failed because SVG was not an accepted image MIME type. Converted the same diagram to PNG and reran successfully. This failure is documented rather than hidden.
+- Final live run: `gpt-6-astra`, Philadelphia public API, PNG floor plan, permit follow-up, one grounding correction, two findings, 14 evidence objects, 76.5 seconds end to end. The final tool path included jurisdiction identification, tax history, deterministic ownership-cost calculation, spatial observation, permit history and grounded submission. The kitchen finding links to the `kitchen` room and cites the spatial and permit evidence.
+- Latency measurements: scripted public-record baseline 2.54 seconds; first successful multimodal Astra run 118.0 seconds; reduced output budget/reasoning effort and demo-focused finding prompt brought the next run to 63.9 seconds, then the final two-finding run measured 76.5 seconds. No public source was replaced with a fixture during live mode; per-investigation dataset caching remains provenance-labeled.
+- Added an NDJSON investigation stream. The UI shows only tool-level labels such as jurisdiction, assessor, floor-plan analysis, permit history, cost calculation and reconciliation; reasoning tokens are never sent to the browser. A validator guard requires a room-linked spatial finding when a spatial observation and permit search both exist, preventing a successful permit call from disappearing from the final demo.
+- Incorporated the existing live-eval diff intentionally: live P0 artifacts now retain sanitized tool traces, model-turn counts and per-case latency metadata. No credentials or raw provider errors are written.
+- Final verification after hardening: 26 tests pass, TypeScript passes, and production build passes. The local demo flags enable the verified live Astra/spatial configuration; the synthetic image and synthetic listing/photo descriptions remain explicitly labeled.
+
 ## Municipal and spatial stage verified checkpoint - 2026-09-10
 
 - Jurisdiction/property selected for the hackathon demo: Philadelphia, Pennsylvania; 2020 Delancey Place, OPA parcel 081035500. The source decision is documented in `MUNICIPAL_DEMO.md` and uses the City-published OpenDataPhilly/OPA and L&I public CARTO endpoints with bounded, read-only queries.

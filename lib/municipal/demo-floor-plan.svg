@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Synthetic demo floor plan</title>
+  <desc id="desc">A kitchen beside a dining room with an open connection and a sink on the kitchen wall.</desc>
+  <rect width="1200" height="800" fill="#f8f5ee"/>
+  <text x="60" y="70" font-family="Arial, sans-serif" font-size="30" fill="#263238" font-weight="700">SYNTHETIC DEMO FLOOR PLAN</text>
+  <text x="60" y="108" font-family="Arial, sans-serif" font-size="20" fill="#617169">Illustrative layout evidence for qualified comparison only</text>
+  <g fill="#fffdf8" stroke="#263238" stroke-width="10">
+    <rect x="100" y="170" width="470" height="470"/>
+    <rect x="570" y="170" width="500" height="470"/>
+  </g>
+  <path d="M570 410h-55M570 500h-55" stroke="#f8f5ee" stroke-width="24"/>
+  <text x="245" y="410" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" fill="#263238" font-weight="700">KITCHEN</text>
+  <text x="820" y="410" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" fill="#263238" font-weight="700">DINING</text>
+  <g fill="#d8e2df" stroke="#617169" stroke-width="5">
+    <rect x="135" y="210" width="170" height="58" rx="8"/>
+    <rect x="135" y="570" width="320" height="38" rx="8"/>
+    <rect x="805" y="205" width="170" height="55" rx="8"/>
+  </g>
+  <circle cx="390" cy="238" r="15" fill="#b38742"/>
+  <text x="420" y="246" font-family="Arial, sans-serif" font-size="21" fill="#263238">sink / plumbing wall</text>
+  <path d="M570 455H735" stroke="#b38742" stroke-width="8" stroke-dasharray="18 14"/>
+  <text x="650" y="445" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#8a5d1f">open connection to compare</text>
+</svg>

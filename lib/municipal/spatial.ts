@@ -14,7 +14,7 @@ export const spatialInstructions = 'Treat floor-plan/photo comparisons as uncert
 // These are text fixtures simulating future multimodal inputs, NOT images of the real property.
 export function spatialFixtures(): { evidence: MunicipalEvidence[]; input: SpatialInput } {
   const evidence = [
-    record('demo:floor-plan', 'Synthetic floor-plan description: an enclosed kitchen appears beside a dining room. Geometry is illustrative and is not a measured plan of 2020 Delancey Place.', { sourceType: 'floor_plan', synthetic: true, provenance: 'synthetic', scope: 'scenario', areaIds: ['kitchen', 'dining'] }),
+    record('demo:floor-plan', 'Synthetic floor-plan image asset: an enclosed kitchen is shown beside a dining room with an open connection between the rooms and a marked sink/plumbing wall. The diagram is illustrative and is not a measured plan of 2020 Delancey Place.', { sourceType: 'floor_plan', synthetic: true, provenance: 'synthetic', scope: 'scenario', areaIds: ['kitchen', 'dining'], data: { asset: 'demo-floor-plan.svg', modality: 'image' } }),
     record('demo:photo', 'Synthetic photo description: the kitchen appears open to a neighboring dining area. This is a text fixture, not an actual listing photo and not proof that a wall was removed.', { sourceType: 'listing_photo', synthetic: true, provenance: 'synthetic', scope: 'scenario', areaIds: ['kitchen', 'dining'] }),
     record('demo:claim', 'Synthetic listing claim for a hypothetical kitchen: recently reconfigured open kitchen. No seller claim is attributed to the real demo property.', { sourceType: 'listing', synthetic: true, provenance: 'synthetic', scope: 'scenario', areaIds: ['kitchen'] }),
   ];

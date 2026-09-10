@@ -6,6 +6,7 @@ export const spatialPhotoPath = join(process.cwd(), 'lib', 'municipal', 'demo-ki
 
 async function inputImage(path: string) {
   const png = await readFile(path);
+  console.info('[municipal] spatial image prepared', { path, bytes: png.byteLength, mime: 'image/png' });
   return { type: 'input_image' as const, image_url: `data:image/png;base64,${png.toString('base64')}`, detail: 'high' as const };
 }
 export async function spatialImageInput() {

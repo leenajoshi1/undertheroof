@@ -32,6 +32,8 @@ npm.cmd run eval:live
 
 The last command requires API credentials and incurs model usage. Offline tests use a scripted transport to test orchestration and correction mechanics, not Astra reliability. Live evals exercise the four behavioral scenarios; the invalid evidence-ID case is deterministic and runs offline.
 
+Live eval reports are written to ignored `artifacts/live-p0/`. Completed investigation responses include non-streaming `audit` metadata showing tool selections and validation outcomes. If the provider reports exhausted credits, the API returns `API_CREDITS_UNAVAILABLE`; this is a blocked investigation, not a property finding.
+
 ## Agent and evidence contract
 
 `lib/investigation.ts` lets Astra choose a source and investigation question through `read_evidence`; it finishes through `submit_findings`. The server returns invalid submissions as structured tool results so Astra can correct them. Each investigation has isolated in-memory evidence, at most 12 model turns, 24 tool calls, and three rejected submissions. API requests have a four-minute deadline.

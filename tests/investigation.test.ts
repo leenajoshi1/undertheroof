@@ -73,6 +73,8 @@ test('tool loop feeds structured errors back and accepts corrected findings', as
   assert.equal(result.corrections, 1);
   assert.equal(result.toolCalls, 4);
   assert.equal(result.findings.length, 1);
+  assert.deepEqual(result.audit.map(event => event.status), ['collected', 'collected', 'rejected', 'accepted']);
+  assert.deepEqual(result.audit[2].errors, ['ABSENCE_IS_NOT_PROOF']);
 });
 test('loop cannot return results without reading the listing', async () => {
   const turn: ModelTurn = async () => ({ output: [call('submit_findings', { findings: [] }, 1)] });

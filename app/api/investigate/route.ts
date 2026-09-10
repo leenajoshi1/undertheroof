@@ -16,6 +16,11 @@ export async function POST(request: Request) {
     const signal = AbortSignal.any([request.signal, AbortSignal.timeout(240_000)]);
     return Response.json(await investigate(sample, createModelTurn(), signal));
   } catch (error) {
+    // Return a useful, allowlisted provider code without exposing raw SDK messages or credentials.
+    const providerCode = typeof error === 'object' && error !== null && 'code' in error ? error.code : undefined;
+    if (providerCode === 'credit_balance_exhausted' || providerCode === 'insufficient_quota') {
+      return Response.json({ error: { code: 'API_CREDITS_UNAVAILABLE', message: 'The configured API credential has no available credits. Restore API credits before retrying the investigation.' } }, { status: 503 });
+    }
     const code = error instanceof Error ? error.message : '';
     const controlled = ['TOOL_LIMIT', 'GROUNDING_RETRIES_EXHAUSTED', 'INVESTIGATION_LIMIT'].includes(code);
     return Response.json({ error: { code: controlled ? code : 'INVESTIGATION_FAILED', message: controlled ? 'The investigation could not produce validated findings within its limits. Please retry.' : 'Astra could not complete the investigation. Check API credentials, model access, and connectivity, then retry.' } }, { status: 502 });

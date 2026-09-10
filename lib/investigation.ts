@@ -4,7 +4,8 @@ import { z } from 'zod';
 import { submissionSchema, validateFindings, type Evidence, type Finding } from './evidence';
 import { readSampleEvidence, sources, type SampleId } from './tools';
 
-export type InvestigationResult = { findings: Finding[]; evidence: Evidence[]; model: string; synthetic: true; toolCalls: number; corrections: number };
+export type ToolAudit = { tool: string; source?: string; question?: string; status: 'collected' | 'accepted' | 'rejected' | 'error'; errors?: string[] };
+export type InvestigationResult = { findings: Finding[]; evidence: Evidence[]; model: string; synthetic: true; toolCalls: number; corrections: number; audit: ToolAudit[] };
 export const instructions = `You are Under the Roof, a residential buyer's investigation agent.
 You investigate claims; you do not summarize listings. All available property data in this prototype is SYNTHETIC.
 Read the listing, identify material claims, formulate questions, and choose relevant sources yourself.
@@ -40,6 +41,7 @@ export function createModelTurn(): ModelTurn {
 export async function investigate(sample: SampleId, turn: ModelTurn, signal?: AbortSignal): Promise<InvestigationResult> {
   const input: ResponseInput = [{ role: 'user', content: `Investigate sample property ${sample}. Available source types: ${sources.join(', ')}. Start by observing the listing.` }];
   const evidence = new Map<string, Evidence>();
+  const audit: ToolAudit[] = [];
   let corrections = 0, toolCalls = 0;
   for (let step = 0; step < 12; step++) {
     signal?.throwIfAborted();
@@ -63,18 +65,25 @@ export async function investigate(sample: SampleId, turn: ModelTurn, signal?: Ab
           const item = readSampleEvidence(sample, parsed.source);
           evidence.set(item.id, item);
           result = item;
+          audit.push({ tool: call.name, source: parsed.source, question: parsed.question, status: 'collected' });
         } else if (call.name === 'submit_findings') {
           if (![...evidence.values()].some(e => e.sourceType === 'listing')) {
             result = { type: 'GROUNDING_ERROR', error: 'MISSING_LISTING', required_correction: 'Read the listing before concluding.' };
             corrections++;
+            audit.push({ tool: call.name, status: 'rejected', errors: ['MISSING_LISTING'] });
           } else {
             const validation = validateFindings(args, [...evidence.values()]);
-            if (validation.ok) return { findings: validation.findings, evidence: [...evidence.values()], model: process.env.OPENAI_MODEL || 'gpt-6-astra', synthetic: true, toolCalls, corrections };
+            if (validation.ok) {
+              audit.push({ tool: call.name, status: 'accepted' });
+              return { findings: validation.findings, evidence: [...evidence.values()], model: process.env.OPENAI_MODEL || 'gpt-6-astra', synthetic: true, toolCalls, corrections, audit };
+            }
             result = validation;
             corrections++;
+            audit.push({ tool: call.name, status: 'rejected', errors: validation.errors.map(e => e.error) });
           }
         } else result = { type: 'TOOL_ERROR', error: 'UNKNOWN_TOOL' };
       } catch (error) {
+        audit.push({ tool: call.name, status: 'error', errors: ['INVALID_ARGUMENTS'] });
         result = { type: 'TOOL_ERROR', error: 'INVALID_ARGUMENTS', detail: error instanceof Error ? error.message : 'Invalid tool arguments' };
       }
       input.push({ type: 'function_call_output', call_id: call.call_id, output: JSON.stringify(result) });

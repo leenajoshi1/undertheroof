@@ -55,3 +55,9 @@
 - Live public-data scripted investigation succeeded with 20 evidence objects, three findings (two municipal plus one explicitly synthetic spatial), and zero natural validation rejections. Next.js POST /api/municipal returned 200 for live, snapshot and synthetic modes. The live municipal model route correctly stays disabled unless explicitly enabled. Original live evals remain ready for credits.
 - Production builds and TypeScript checks pass. Three.js scene construction/linkage/disposal tests pass; tsx emits a non-failing CommonJS deprecation warning for Three.js. Browser QA attempted through the supplied browser tool, but it reported no browser available; interactive WebGL appearance is not visually verified.
 - Artifacts are saved locally under ignored artifacts/municipal/. Public snapshot and documentation are committed; credentials remain ignored. No auth, database, chat, nationwide lookup, PDFs or actual photo-analysis pipeline added.
+
+## Live P0 verified checkpoint - 2026-09-10
+
+- Re-ran all four behavioral evaluations through the live GPT-6 Astra Responses API with the configured `gpt-6-astra` model. All four passed: `documented-roof` (0 findings), `missing-permit` (1 finding), `conflicting-documents` (1 finding), and `no-concerns` (0 findings).
+- The live audit confirms Astra autonomously selected relevant evidence sources and stopped when no material concern existed. The successful runs exercised the live tool-selection and grounded-finding path; no fixed roof/permit checklist was imposed.
+- This replaces the earlier credit-exhaustion status for the gate. The verified P0 checkpoint is committed before the municipal/spatial work continues.

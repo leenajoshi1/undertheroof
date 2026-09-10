@@ -12,7 +12,7 @@ npm.cmd run demo:municipal -- --synthetic
 
 These use the explicitly scripted model transport. The first uses the dated public snapshot; `--live` calls the public Philadelphia API, not Astra. Reports go to ignored `artifacts/municipal/`.
 
-Run the app as usual and visit `/municipal`. Set `SPATIAL_DEMO_ENABLED=1` in your local environment and restart to enable the optional illustrative room scenario. Otherwise the spatial tool and view remain disabled. This additive page reuses existing styles; the original page and P0 integration are unchanged.
+Run the app as usual and visit `/municipal`. Set `SPATIAL_DEMO_ENABLED=1` and `MUNICIPAL_ASTRA_ENABLED=1` in your local environment and restart to enable the live multimodal graph demo. The app sends the synthetic floor-plan and kitchen reference PNGs to GPT-6 Astra, which returns the approximate Property Spatial Graph used by the room view. This additive page reuses existing styles; the original page and P0 integration are unchanged.
 
 API example:
 
@@ -56,7 +56,7 @@ The executor exposes jurisdiction, assessor, tax history, exemption, special-ass
 
 Tool results become compatible Evidence objects with provenance, scope, tax year, limitations and optional derivedFrom/areaIds. Existing grounding validation is reused unchanged. The municipal wrapper additionally requires calculation dependencies and spatial-to-permit citations. Activity events use fixed high-level labels, not chain-of-thought, and are currently returned after completion rather than streamed.
 
-Spatial fixtures are text descriptions simulating a future floor plan, listing photo and claim; they are not real images of this house. A validated structured observation is an uncertain hypothesis. The prototype rejects structural/code diagnoses, nonexistent sources and unknown rooms. It does not provide comprehensive semantic safety or actual multimodal analysis.
+The spatial demo uses clearly labeled synthetic floor-plan and kitchen-reference PNGs plus a synthetic claim; they are not images of this house. Astra returns a validated approximate graph with room bounds, adjacency, connections and observations. The prototype rejects structural/code diagnoses, exact dimensions without source support, nonexistent sources and unknown rooms. Spatial output is evidence, not ground truth.
 
 The test path is:
 
@@ -64,4 +64,4 @@ The test path is:
 
 The public record contains permit 959959, a 2019 gutter/roofing scope. That does not establish anything about the hypothetical kitchen layout. Findings using these synthetic spatial inputs must explicitly say `Synthetic scenario:` and retain the underlying source citations.
 
-Three.js renders only two illustrative room boxes in meters. Geometry userData contains finding and evidence IDs, so selecting the kitchen opens the related finding; selecting its finding highlights the room. Accessible room buttons provide the same linkage. There is no decorative reconstruction, wall-removal detection, measured floor-plan inference, or structural analysis. Scene construction/disposal and linkage are tested. Browser/WebGL visual QA remains pending because no browser was available to the automation tool.
+Three.js generates room boxes from Astra's normalized graph bounds; visual scale and wall height are renderer units, not property measurements. Geometry userData contains adjacency, confidence, finding and evidence IDs. Selecting a room opens its floor-plan/photo evidence, Astra observation, investigation action and linked finding. There is no decorative reconstruction, wall-removal detection, measured-floor-plan claim or structural analysis. Scene construction, graph-to-geometry changes and linkage are tested. Browser/WebGL visual QA remains pending because no browser was available to the automation tool.

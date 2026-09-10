@@ -66,6 +66,16 @@
 - Incorporated the existing live-eval diff intentionally: live P0 artifacts now retain sanitized tool traces, model-turn counts and per-case latency metadata. No credentials or raw provider errors are written.
 - Final verification after hardening: 26 tests pass, TypeScript passes, and production build passes. The local demo flags enable the verified live Astra/spatial configuration; the synthetic image and synthetic listing/photo descriptions remain explicitly labeled.
 
+## Astra-generated Property Spatial Graph checkpoint - 2026-09-10
+
+- Replaced normal-demo fixture geometry with a typed `PropertySpatialGraph` returned by the Astra `record_spatial_graph` function tool. The graph contains normalized 0-1 approximate room bounds, adjacency, room connections and qualified observations. The legacy coordinate fixture remains only inside the explicitly scripted fallback transport.
+- The live multimodal input now includes the synthetic floor-plan PNG and synthetic kitchen reference PNG as two `input_image` blocks, plus the existing claim evidence. The image and claim sources remain clearly labeled synthetic; no actual property listing is asserted.
+- Astra live result: two rooms (`kitchen`, `dining`), one `open_transition` connection, one low-confidence kitchen observation, one permit lookup selected after spatial extraction, and two grounded findings. Final run measured 53.9 seconds total, 7.8 seconds for the spatial Astra call, and 1 ms for graph validation. The scripted graph-to-permit path remains model-transport-only and does not represent live Astra behavior.
+- Three.js now generates room meshes from `PropertySpatialGraph.rooms`; changing model-returned bounds changes rendered geometry. The UI labels the result “AI-reconstructed spatial model — approximate, not to scale,” shows graph extraction before the municipal investigation completes, and clicking a room reveals image evidence, Astra observation, investigation action and linked finding. Local graph-to-scene construction is effectively immediate and is displayed in milliseconds.
+- Spatial safeguards reject missing evidence, duplicate/unknown rooms, out-of-range normalized bounds, invalid connections, unsupported structural/code/illegal-work claims and exact dimensions when the sources do not provide them. A graph can complete without a permit lookup; the model-selected follow-up remains optional.
+- The first graph API attempt exposed a strict Responses function-schema error because nullable `investigationSuggestion` was modeled as optional. Changed it to required-but-nullable and reran successfully.
+- Regression coverage is now 29 tests. All pass; TypeScript and production build pass. The existing live P0 trace diff remains intentionally incorporated with sanitized tool traces, model-turn counts and latency metadata.
+
 ## Municipal and spatial stage verified checkpoint - 2026-09-10
 
 - Jurisdiction/property selected for the hackathon demo: Philadelphia, Pennsylvania; 2020 Delancey Place, OPA parcel 081035500. The source decision is documented in `MUNICIPAL_DEMO.md` and uses the City-published OpenDataPhilly/OPA and L&I public CARTO endpoints with bounded, read-only queries.

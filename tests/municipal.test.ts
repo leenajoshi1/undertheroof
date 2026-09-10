@@ -62,12 +62,13 @@ test('scripted municipal/spatial flow rejects invented citation, corrects and li
   assert.equal(result.corrections, 1);
   assert.equal(result.model, 'scripted');
   assert.equal(result.findings.length, 3);
-  const spatialIndex = result.events.findIndex(e => e.tool === 'record_spatial_observation');
+  const spatialIndex = result.events.findIndex(e => e.tool === 'record_spatial_graph');
   const permitIndex = result.events.findIndex(e => e.tool === 'get_permit_history');
   assert.ok(spatialIndex < permitIndex);
   const finding = result.findings.find(f => f.areaIds.includes('kitchen'))!;
   assert.ok(finding.evidenceIds.includes('phila:permit-search'));
   assert.ok(finding.evidenceIds.includes('demo:floor-plan'));
+  assert.ok(finding.evidenceIds.includes('spatial:graph'));
   assert.ok(finding.evidenceIds.includes('phila:permit:959959'));
   assert.equal(result.events.filter(e => e.phase === 'rejected').length, 1);
   const invalid = structuredClone(result.findings); invalid[0].evidenceIds = invalid[0].evidenceIds.filter(id => id !== 'phila:tax-rate');
@@ -98,6 +99,13 @@ test('spatial Astra request carries the real PNG image input', async () => {
     return { output: [{ type: 'function_call', call_id: 'submit', name: 'submit_findings', arguments: JSON.stringify({ findings: [] }) }] };
   } });
   assert.equal(result.findings.length, 0);
+});
+test('spatial observation does not automatically force a permit lookup', async () => {
+  let step = 0;
+  const graph = { coordinateSystem: 'normalized_0_to_1', geometryStatus: 'approximate', rooms: [{ id: 'kitchen', label: 'Kitchen', bounds: { x: 0, z: 0, width: 0.5, depth: 0.5 }, adjacentTo: [], evidenceIds: ['demo:floor-plan', 'demo:photo'], confidence: 'low' }], connections: [], observations: [{ id: 'kitchen-note', area: 'kitchen', observation: 'The supplied visual evidence may warrant a documentation question.', evidenceIds: ['demo:floor-plan', 'demo:photo'], confidence: 'low', investigationSuggestion: null }] };
+  const result = await investigateMunicipal({ mode: 'snapshot', modelLabel: 'scripted', spatial: true, turn: async () => { step++; const name = step === 1 ? 'record_spatial_graph' : step === 2 ? 'get_assessor_record' : 'submit_findings'; const args = name === 'record_spatial_graph' ? graph : name === 'get_assessor_record' ? { parcel: '081035500' } : { findings: [] }; return { output: [{ type: 'function_call', call_id: String(step), name, arguments: JSON.stringify(args) }] }; } });
+  assert.ok(result.spatialGraph);
+  assert.ok(!result.events.some(event => event.tool === 'get_permit_history'));
 });
 
 test('synthetic scenario does not invent a tax increase when supplied years are equal', async () => {

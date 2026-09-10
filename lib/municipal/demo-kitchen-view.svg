@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Synthetic kitchen reference image</title>
+  <desc id="desc">An illustrative kitchen wall with cabinets, a sink, and a doorway toward dining.</desc>
+  <rect width="1200" height="800" fill="#e9e3d7"/>
+  <text x="60" y="70" font-family="Arial, sans-serif" font-size="30" fill="#263238" font-weight="700">SYNTHETIC KITCHEN REFERENCE IMAGE</text>
+  <text x="60" y="108" font-family="Arial, sans-serif" font-size="20" fill="#617169">Illustrative room evidence — not an actual listing photograph</text>
+  <rect x="90" y="170" width="1020" height="500" rx="8" fill="#f8f5ee" stroke="#263238" stroke-width="10"/>
+  <g fill="#d8e2df" stroke="#617169" stroke-width="6"><rect x="150" y="230" width="210" height="130"/><rect x="390" y="230" width="210" height="130"/><rect x="630" y="230" width="210" height="130"/></g>
+  <rect x="150" y="500" width="660" height="105" rx="10" fill="#b8c7c1" stroke="#617169" stroke-width="7"/>
+  <rect x="365" y="515" width="190" height="75" rx="35" fill="#f8f5ee" stroke="#263238" stroke-width="6"/>
+  <path d="M460 515v-65c0-35 65-35 65 0v65" fill="none" stroke="#b38742" stroke-width="12"/>
+  <path d="M900 380v290h150V380" fill="#fffdf8" stroke="#263238" stroke-width="10"/>
+  <text x="460" y="700" text-anchor="middle" font-family="Arial, sans-serif" font-size="23" fill="#263238">sink shown on this wall</text>
+  <text x="975" y="365" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#8a5d1f">opening</text>
+</svg>

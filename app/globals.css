@@ -27,6 +27,7 @@ blockquote { margin: 12px 0; border-left: 2px solid #b6c9b8; padding: 8px 16px; 
 .trace li { margin: .35rem 0; color: #617169; }
 .trace li.completed { color: #263238; }
 .trace li.rejected, .trace li.failed { color: #9a4d2f; }
+.spatial-detail { background: #fffdf8; border: 1px solid #d8ded6; border-radius: 10px; padding: 16px; margin-top: 16px; }
 footer { margin-top: 70px; }
 :focus-visible { outline: 3px solid #b38742; outline-offset: 3px; }
 @media(max-width: 600px) { .input-row { flex-direction: column; } header span { display: none; } header { margin-bottom: 40px; } }

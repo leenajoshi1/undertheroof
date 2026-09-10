@@ -12,15 +12,15 @@ npm.cmd run demo:municipal -- --synthetic
 
 These use the explicitly scripted model transport. The first uses the dated public snapshot; `--live` calls the public Philadelphia API, not Astra. Reports go to ignored `artifacts/municipal/`.
 
-Run the app as usual and visit `/municipal`. Set `SPATIAL_DEMO_ENABLED=1` and `MUNICIPAL_ASTRA_ENABLED=1` in your local environment and restart to enable the live multimodal graph demo. The app sends the synthetic floor-plan and kitchen reference PNGs to GPT-6 Astra, which returns the approximate Property Spatial Graph used by the room view. This additive page reuses existing styles; the original page and P0 integration are unchanged.
+Run the app as usual and visit `/municipal`. Set `SPATIAL_DEMO_ENABLED=1` and `MUNICIPAL_ASTRA_ENABLED=1` in your local environment and restart to enable the live multimodal graph demo. The app sends the synthetic floor-plan and kitchen reference PNGs to GPT-6 Astra, which returns the approximate Property Spatial Graph used by the room view. The homepage now leads to this live municipal/spatial demo; the original P0 API and behavioral evaluations remain available.
 
 API example:
 
 ```json
-{"dataMode":"snapshot","model":"scripted","spatial":false}
+{"dataMode":"live","model":"gpt-6-astra","spatial":true,"stream":true}
 ```
 
-POST to `/api/municipal`. Data mode must be explicit. The UI deliberately uses the scripted transport. The additive municipal Astra transport is available behind `MUNICIPAL_ASTRA_ENABLED=1`, using model `gpt-6-astra`, but is not live-verified and has not been exercised while credits are blocked. The original `npm.cmd run eval:live` remains unchanged and ready to rerun.
+POST to `/api/municipal`. Data mode and model transport are explicit. The primary UI defaults to live public records and live GPT-6 Astra, with spatial analysis enabled when the environment flag is set. The route streams NDJSON tool events and graph evidence before the final result. Live verification and measured endpoint timings are summarized in [README.md](README.md).
 
 ## Public sources and limitations
 
@@ -54,7 +54,7 @@ Actual billed tax, payment history, arrears, tax certificates, abatement type/ex
 
 The executor exposes jurisdiction, assessor, tax history, exemption, special-assessment, permit, recurring-charge and calculator tools. It does not impose their order. Tests demonstrate a model-selected subset and a different order without requiring a checklist. The scripted demo has an explicit test sequence; it is never represented as autonomous Astra behavior.
 
-Tool results become compatible Evidence objects with provenance, scope, tax year, limitations and optional derivedFrom/areaIds. Existing grounding validation is reused unchanged. The municipal wrapper additionally requires calculation dependencies and spatial-to-permit citations. Activity events use fixed high-level labels, not chain-of-thought, and are currently returned after completion rather than streamed.
+Tool results become compatible Evidence objects with provenance, scope, tax year, limitations and optional derivedFrom/areaIds. Existing grounding validation is reused unchanged. The municipal wrapper additionally requires calculation dependencies and spatial-to-permit citations. Activity events use fixed high-level labels, not chain-of-thought, and stream as tool actions occur. The graph event lets the UI render before the final findings arrive.
 
 The spatial demo uses clearly labeled synthetic floor-plan and kitchen-reference PNGs plus a synthetic claim; they are not images of this house. Astra returns a validated approximate graph with room bounds, adjacency, connections and observations. The prototype rejects structural/code diagnoses, exact dimensions without source support, nonexistent sources and unknown rooms. Spatial output is evidence, not ground truth.
 
@@ -64,4 +64,4 @@ The test path is:
 
 The public record contains permit 959959, a 2019 gutter/roofing scope. That does not establish anything about the hypothetical kitchen layout. Findings using these synthetic spatial inputs must explicitly say `Synthetic scenario:` and retain the underlying source citations.
 
-Three.js generates room boxes from Astra's normalized graph bounds; visual scale and wall height are renderer units, not property measurements. Geometry userData contains adjacency, confidence, finding and evidence IDs. Selecting a room opens its floor-plan/photo evidence, Astra observation, investigation action and linked finding. There is no decorative reconstruction, wall-removal detection, measured-floor-plan claim or structural analysis. Scene construction, graph-to-geometry changes and linkage are tested. Browser/WebGL visual QA remains pending because no browser was available to the automation tool.
+Three.js generates room boxes from Astra's normalized graph bounds; visual scale and wall height are renderer units, not property measurements. Geometry userData contains adjacency, confidence, finding and evidence IDs. Selecting a room opens its floor-plan/photo evidence, Astra observation, investigation action and linked finding. There is no decorative reconstruction, wall-removal detection, measured-floor-plan claim or structural analysis. Scene construction, graph-to-geometry changes and linkage are tested. The user visually reviewed the live demo and requested the final room-panel and finding-card refinements. Automated browser verification was unavailable in the agent session; API timings are not browser render timings.
